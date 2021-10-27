@@ -1,0 +1,75 @@
+.movie-list {
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: -.7vw;
+    width: calc(100% +  .7vw);
+    margin-left: -.7vw;
+}
+
+.movie-list > .movie-list__item {
+  width: calc(100%/6);
+  padding-top: .7vw;
+  padding-left: .7vw;
+  box-sizing: border-box;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 350px) {
+	.movie-list > .movie-list__item {
+		width: 100%
+	}
+  }
+@media only screen and (min-width: 350px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/2);
+	}
+}
+@media only screen and (min-width: 510px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/3);
+	}
+}
+@media only screen and (min-width: 670px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/4);
+	}
+}
+@media only screen and (min-width: 830px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/5);
+	}
+}
+@media only screen and (min-width: 1000px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/6);
+	}
+}
+@media only screen and (min-width: 1200px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/7);
+	}
+}
+@media only screen and (min-width: 1350px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/8);
+	}
+}
+
+@media only screen and (min-width: 1500px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/9);
+	}
+}
+
+@media only screen and (min-width: 1700px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/10);
+	}
+}
+
+@media only screen and (min-width: 1900px) {
+	.movie-list > .movie-list__item {
+		width: calc(100%/11);
+	}
+}

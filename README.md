@@ -1,5 +1,12 @@
 # fire-react-app
 Test React application with firebase
+
+# DEPLOY
+`npm run build && firebase deploy -m "Deploy message"`
+
+# Firebase serve
+ `firebase serve --only hosting`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
