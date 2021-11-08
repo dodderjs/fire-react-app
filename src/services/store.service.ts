@@ -3,6 +3,7 @@ import FireService from './firebase.service';
 import TmdbService from './tmdb.service';
 import { Singleton } from '../decorators/signleton';
 
+
 @Singleton
 class StoreService {
 	pageSize = 50;

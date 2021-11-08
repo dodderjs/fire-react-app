@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { Movie } from '../movie';
 import storeService from '../services/store.service';
 import MovieCard from './MovieCard.component';
-import Grid from '@mui/material/Grid';
 import './MovieList.component.css';
 
 interface MovielistProps {

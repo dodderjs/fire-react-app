@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Typography, Badge } from '@mui/material';
 import { Movie } from '../movie';
+import UserService from '../services/user.service';
 
 export default function MovieCard(props: { movie: Movie } & React.HTMLAttributes<HTMLDivElement>) {
 	const movie = props.movie;
@@ -8,7 +9,7 @@ export default function MovieCard(props: { movie: Movie } & React.HTMLAttributes
 
 	return (
 		<div className={props.className}>
-			<Badge badgeContent={'New'} color="primary"  invisible={!movie.is_new}>
+			<Badge badgeContent={'New'} color="primary"  invisible={!UserService.isItNew(movie.lastUploadedAt)}>
 			<Card>
 				<CardMedia
 					component="img"

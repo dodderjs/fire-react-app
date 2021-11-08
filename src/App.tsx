@@ -14,8 +14,9 @@ class App extends Component<any, AppState>  {
 	constructor(props:any) {
 		super(props);
 		const w = window.innerWidth / 160;
+		const pageCount = Math.floor(w) *  Math.ceil(window.innerHeight / (240* (window.innerWidth / (160*Math.floor(w)))));
 		this.state = {
-			pageSize: Math.floor(w) *  Math.ceil(window.innerHeight / (240* (window.innerWidth / (160*Math.floor(w)))))
+			pageSize: pageCount < 10 ? 10 : pageCount
 		}
 	}
 
