@@ -1,5 +1,6 @@
 import {Singleton} from '../decorators/signleton';
 import moment from 'moment';
+import FireService from './firebase.service';
 
 
 @Singleton
@@ -23,6 +24,13 @@ class UserService {
 	public isItNew(date:Date|undefined):boolean {
 		const twoDaysAgo = moment().subtract(2, 'days').startOf('day');
 		return moment(date).isAfter(this.lastVisit) || moment(date).isAfter(twoDaysAgo);
+	}
+
+	signIn() {
+		return FireService.signIn();
+	}
+	signOut() {
+		return FireService.signOut();
 	}
 }
 export default new UserService();

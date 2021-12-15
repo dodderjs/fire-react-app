@@ -2,16 +2,41 @@
     box-sizing: border-box;
     display: flex;
     flex-flow: row wrap;
-    margin-top: -.7vw;
     width: calc(100% +  .7vw);
     margin-left: -.7vw;
 }
 
+.movie-list > .movie-list__item.offline {
+	opacity: 0.3;
+}
+.movie-list > .movie-list__item.offline:hover {
+	opacity: 1;
+}
 .movie-list > .movie-list__item {
   width: calc(100%/6);
   padding-top: .7vw;
   padding-left: .7vw;
   box-sizing: border-box;
+  overflow: hidden;
+}
+.movie-list > .movie-list__item .movie-list__item__inner {
+	padding-top: 150%;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.movie-list__item__details {
+	position: absolute;
+	z-index: 2;
+	bottom: 0;
+	width: 100%;
+}
+.movie-list__item .movie-list__item__collapsable {
+	overflow: hidden;
+	height: 0;
+}
+.movie-list__item:hover .movie-list__item__collapsable {
+	height: auto;
 }
 
 /* Extra small devices (phones, 600px and down) */

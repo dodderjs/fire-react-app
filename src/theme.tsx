@@ -2,6 +2,9 @@ import { createTheme } from "@mui/material";
 
 
 const theme = createTheme({
+	palette: {
+		mode: 'dark'
+	},
 	breakpoints: {
 		values: {
 			xs: 0,
@@ -25,6 +28,7 @@ const theme = createTheme({
 					boxShadow: 'none',
 					position: 'relative',
 					maxWidth: 'none',
+					overflow: 'hidden',
 					'&:after': {
 						content: '""',
 						display: 'block',
@@ -42,11 +46,6 @@ const theme = createTheme({
 			styleOverrides: {
 				// Name of the slot
 				root: {
-					padding: '24px 16px',
-					position: 'absolute',
-					zIndex: 2,
-					bottom: 0,
-					width: '100%'
 				}
 			}
 		}
