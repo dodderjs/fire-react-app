@@ -1,14 +1,14 @@
 //import logo from './logo.svg';
 import { Component } from 'react';
-import MovieList from './components/MovieList/MovieList.component';
-import AuthContext from './contexts/auth.context';
-import Nav from './components/Nav.component';
-import { User } from 'firebase/auth';
-import { CircularProgress, Grid } from '@mui/material';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import {AuthContext, AuthProvider} from './providers/auth.provider';
+import {storeService} from './services/store.service';
+
 import { Movie } from './movie';
-import storeService from './services/store.service';
-import {BrowserRouter as Router,Route} from'react-router-dom';
-import Login from './components/Login.component';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import { RequireAuth } from './components/RequireAuth';
+import MoviesProvider from './providers/movies.provider';
 
 // <img src={logo} className="App-logo" alt="logo" />
 
@@ -37,78 +37,23 @@ class App extends Component<any, AppState>  {
 		}
 		storeService.pageSize = this.state.pageSize;
 	}
-	componentDidMount() {
-		this.getMovies();
-	}
-
-	getMovies(filter = this.state.filterText) {
-		this.setState({
-			loading: true
-		});
-		storeService.getOnlineMovies(filter, 1)
-			.then((data: Movie[]) => this.setState({ movies:  data, filterText: filter, loading: false }))
-			.catch((e:Error) => this.setState({ loading: false, error: e }));
-	}
-
-	handleFilterTextChange(value:string) {
-		this.getMovies(value);
-	}
-
-	renderApp() {
-		return (
-			<Grid container className="App">
-				<Nav
-					search={this.state.filterText}
-          			onSearchChange={this.handleFilterTextChange.bind(this)}
-		  		/>
-				<MovieList
-					movies={this.state.movies}
-					loading={this.state.loading}
-					pageSize={this.state.pageSize}
-				/>
-			</Grid>);
-	}
-
-	renderLogin() {
-		let {loading} = this.context;
-		return (<Grid
-			container
-			spacing={0}
-			direction="column"
-			alignItems="center"
-			justifyContent="center"
-			style={{ minHeight: '100vh' }}
-		  >
-
-			<Grid item xs={3}>
-				{loading ? this.renderLoading() : <Login />}
-			</Grid>
-		  </Grid> )
-	}
-	renderLoading() {
-		return (<CircularProgress color="secondary" />)
-	}
 
 	render() {
-		let { user } = this.context;
+		let { user, signIn, signOut } = this.context;
 
-		return user ? this.renderApp() : this.renderLogin();
-		/*return (
-			<Router>
-				<Route element={<Layout />}>
-				<Route path="/" element={<PublicPage />} />
-				<Route path="/login" element={<LoginPage />} />
-				<Route
-					path="/protected"
-					element={
-					<RequireAuth>
-						<ProtectedPage />
+		//return user ? this.renderApp() : this.renderLogin();
+		return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={
+					<RequireAuth user={user}>
+						<MoviesProvider><Home user={user} signOut={signOut}/></MoviesProvider>
 					</RequireAuth>
-					}
-				/>
-				</Route>
-		  </Router>
-		);*/
+					} />
+				<Route path="login" element={<Login user={user} signIn={signIn} />}/>
+			</Routes>
+		</BrowserRouter>
+		);
 	}
 }
 

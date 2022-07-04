@@ -4,7 +4,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
 import App from './App';
 import './index.css';
-import AuthProvider from './providers/auth.provider';
+import { AuthProvider } from './providers/auth.provider';
 
 render(
 	<StrictMode>

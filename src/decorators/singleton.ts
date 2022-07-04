@@ -1,14 +1,14 @@
 //Thanks Trevor Atlas
 export const SINGLETON_KEY = Symbol();
 
-export type Singleton<T extends new (...args: any[]) => any> = T & {
+export type SingletonType<T extends new (...args: any[]) => any> = T & {
     [SINGLETON_KEY]: T extends new (...args: any[]) => infer I ? I : never
 };
 
 export const Singleton = <T extends new (...args: any[]) => any>(type: T) =>
     new Proxy(type, {
         // this will hijack the constructor
-        construct(target: Singleton<T>, argsList, newTarget) {
+        construct(target: SingletonType<T>, argsList, newTarget) {
             // we should skip the proxy for children of our target class
             if (target.prototype !== newTarget.prototype) {
                 return Reflect.construct(target, argsList, newTarget);

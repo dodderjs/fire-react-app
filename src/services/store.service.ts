@@ -1,29 +1,28 @@
 import { Movie, TMDBMovie, TMDBMovieDetail } from '../movie';
-import FireService from './firebase.service';
-import TmdbService from './tmdb.service';
-import { Singleton } from '../decorators/signleton';
-import tmdbService from './tmdb.service';
+import {tmdbService} from './tmdb.service';
 import { uniqBy } from 'lodash';
-@Singleton
+import { fireService } from './firebase.service';
+
+
 class StoreService {
 	pageSize = 50;
 	lastVisible:any;
 
 	async searchMovies(queryText:string):Promise<Movie[]> {
 		const tMovies = await tmdbService.searchMovies(queryText);
-		const onlineMovies = await FireService.moviesByMap(uniqBy(tMovies, 'id').slice(0, 9).map(t => t.id.toString()), this.pageSize);
+		const onlineMovies = await fireService.moviesByMap(uniqBy(tMovies, 'id').slice(0, 9).map(t => t.id.toString()), this.pageSize);
 		const foundIds = onlineMovies.map(v => v.id);
-
 		return onlineMovies.concat(tMovies.filter(v => !foundIds.includes(v.id.toString())) as Movie[])
 	}
 
 	async getOnlineMovies(filter='', page = 1):Promise<Movie[]> {
-		return filter ? await this.searchMovies(filter) : await FireService.onlineMovies(page, this.pageSize);
+		const result = filter ? await this.searchMovies(filter) : await fireService.onlineMovies(page, this.pageSize);
+		return result;
 	}
 
 	async getMovieById(id: string | number): Promise<TMDBMovieDetail | null> {
 		try {
-			return TmdbService.getMovieById(id);
+			return tmdbService.getMovieById(id);
 		} catch (e: any) {
 			return this.handleError<TMDBMovieDetail | null>('getMovie', null)(e);
 		}
@@ -31,7 +30,7 @@ class StoreService {
 
 	async getMovies(list = 'upcoming', page = 1): Promise<TMDBMovie[]> {
 		try {
-			return TmdbService.getMovies(list, page);
+			return tmdbService.getMovies(list, page);
 		} catch (e: any) {
 			return this.handleError<Movie[]>('getMovies', [])(e);
 		}
@@ -50,4 +49,14 @@ class StoreService {
 
 
 }
-export default new StoreService();
+
+let instance:StoreService;
+const StoreFactory = {
+	getInstance: function () {
+		if (!instance) {
+			instance = new StoreService();
+		}
+		return instance;
+	}
+};
+export const storeService = StoreFactory.getInstance();

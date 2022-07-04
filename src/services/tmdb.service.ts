@@ -1,9 +1,7 @@
-import { fetchJSON } from './fetch.service';
+import { fetchJSON } from '../utils/fetch';
 import environment from '../environments/environment';
 import {TMDBMovie, TMDBMovieDetail} from '../movie';
-import {Singleton} from '../decorators/signleton';
 
-@Singleton
 class TmdbService {
 	public async getMovieById(id: string | number): Promise<TMDBMovieDetail> {
 		const data: TMDBMovieDetail = await fetchJSON(`${environment.tmdb.baseUrl}/movie/${id}?api_key=${environment.tmdb.apikey}&language=en-US&append_to_response=videos`);
@@ -31,7 +29,7 @@ class TmdbService {
 		return (data.results || []).map(movie => ({
 			...movie,
 			image: movie.poster_path ? `${environment.tmdb.imageUrl}/w300${movie.poster_path}` : 'https://via.placeholder.com/300x400/0d0d0d/FFFFFF/?text=No%20Image',
-			release_date: movie.release_date && new Date(movie.release_date) || null
+			release_date: (movie.release_date && new Date(movie.release_date)) || null
 		}));
 	}
 }
@@ -47,4 +45,15 @@ export interface TmdbResponse {
 	total_results: number;
 }
 
-export default new TmdbService();
+
+
+let instance:TmdbService;
+const tmdbFactory = {
+	getInstance: function () {
+		if (!instance) {
+			instance = new TmdbService();
+		}
+		return instance;
+	}
+};
+export const tmdbService = tmdbFactory.getInstance();

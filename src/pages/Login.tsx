@@ -1,20 +1,15 @@
-import {MouseEvent} from 'react';
-import User from '../services/user.service';
-import { Button, Grid } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import Grid from '@mui/material/Grid';
+import { useContext } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import Login from '../components/Login.component';
+import {WithLoading} from '../components/WithLoading';
+import { AuthContext } from '../providers/auth.provider';
 
-function LoginPage() {
-	let navigate = useNavigate();
-	let location = useLocation();
+function LoginPage(props:any) {
+	const location = useLocation();
 
-	let from = location.state?.from?.pathname || "/";
-
-	const onClick = (event:MouseEvent<HTMLElement>) => {
-		event.preventDefault();
-
-		User.signIn().then(() => {
-			navigate(from, { replace: true });
-		});
+	if (props.user) {
+	  return <Navigate to={location?.state?.from !== '/login' && location?.state?.from || '/'} replace />;
 	}
 
 	return (<Grid
@@ -26,10 +21,10 @@ function LoginPage() {
 		style={{ minHeight: '100vh' }}
 	  >
 		<Grid item xs={3}>
-		  <Button className="button" onClick={ onClick } variant="contained"><i className="fab fa-google"></i>Sign in with google</Button>
+			<Login signIn={props.signIn}/>
 		</Grid>
-
 	  </Grid> );
   }
 
-  export default LoginPage;
+  export default WithLoading(LoginPage);
+

@@ -1,11 +1,11 @@
 import { AppBar, Button, Divider, IconButton, InputBase, Toolbar, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import User from '../services/user.service';
 import { FormEvent, useState, ChangeEvent } from 'react';
 
 type NavProps = {
 	search: string,
-	onSearchChange: Function
+	onSearchChange: Function,
+	signOut: Function
 }
 
 const Nav = (props:NavProps) => {
@@ -40,7 +40,7 @@ const Nav = (props:NavProps) => {
 					</Grid>
 				</Grid>
 				<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-				<Button color="inherit" onClick={ User.signOut }>Log Out</Button>
+				<Button color="inherit" onClick={ () => props.signOut() }>Log Out</Button>
 			</Toolbar>
 		</AppBar>
 	);

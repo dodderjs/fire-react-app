@@ -1,9 +1,6 @@
-import {Singleton} from '../decorators/signleton';
 import moment from 'moment';
-import FireService from './firebase.service';
+import { fireService } from './firebase.service';
 
-
-@Singleton
 class UserService {
 	private _lastVisit:Date = new Date();
 
@@ -26,11 +23,23 @@ class UserService {
 		return moment(date).isAfter(this.lastVisit) || moment(date).isAfter(twoDaysAgo);
 	}
 
+	onAuthStateChanged = fireService.onAuthStateChanged.bind(fireService);
+
 	signIn() {
-		return FireService.signIn();
+		return fireService.signIn();
 	}
 	signOut() {
-		return FireService.signOut();
+		return fireService.signOut();
 	}
 }
-export default new UserService();
+
+let instance:UserService;
+const UserFactory = {
+	getInstance: function () {
+		if (!instance) {
+			instance = new UserService();
+		}
+		return instance;
+	}
+};
+export const userService = UserFactory.getInstance();

@@ -4,10 +4,8 @@ import { getAnalytics, logEvent, Analytics } from 'firebase/analytics';
 import { getFirestore, query, orderBy, limit, collection, getDocs, QuerySnapshot, Query, DocumentData, QueryDocumentSnapshot, startAfter, where, documentId } from "firebase/firestore";
 import env from '../environments/environment';
 import {Movie} from '../movie';
-import { Singleton } from '../decorators/signleton';
 
 
-@Singleton
 export class FireService {
 	static _instance:FireService;
 	private static app = initializeApp(env.firebase);
@@ -34,7 +32,6 @@ export class FireService {
 
 		const querySnapshot:QuerySnapshot<DocumentData> = await getDocs(q);
 		this.lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
-
 		return this.convertDocs(querySnapshot);
 	}
 
@@ -71,5 +68,19 @@ export class FireService {
 	public signOut() {
 		FireService.auth.signOut();
 	}
+
+	public onAuthStateChanged = FireService.auth.onAuthStateChanged.bind(FireService.auth)
 }
-export default new FireService();
+
+
+let instance:FireService;
+const FireFactory = {
+	getInstance: function () {
+		if (!instance) {
+			instance = new FireService();
+		}
+		return instance;
+	}
+};
+export const fireService = FireFactory.getInstance();
+

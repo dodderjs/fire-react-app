@@ -3,7 +3,7 @@ import CloudOffIcon from '@mui/icons-material/CloudOff';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { Movie } from '../../movie';
-import UserService from '../../services/user.service';
+import { userService } from '../../services/user.service';
 
 export default function MovieCard(props: { movie: Movie } & React.HTMLAttributes<HTMLDivElement>) {
 	const movie = props.movie;
@@ -17,7 +17,7 @@ export default function MovieCard(props: { movie: Movie } & React.HTMLAttributes
 						<Typography variant="body2" component="p">
 								{ movie.imdb_rank > 7 && <NewReleasesIcon /> }
 								{ !movie.lastUploadedAt && <CloudOffIcon /> }
-								{ movie.lastUploadedAt && UserService.isItNew(movie.lastUploadedAt) && <FiberNewIcon /> }
+								{ movie.lastUploadedAt && userService.isItNew(movie.lastUploadedAt) && <FiberNewIcon /> }
 							</Typography>
 							<Typography gutterBottom variant="h6" component="h6">
 								{movie.title}

@@ -1,28 +1,44 @@
 import { useEffect, useState, ReactNode } from "react";
 import { User } from 'firebase/auth';
-import { FireService } from '../services/firebase.service';
-import AuthContext from "../contexts/auth.context";
+import {createContext} from "react";
+import { userService } from "../services/user.service";
+import { FireService } from "../services/firebase.service";
+
+interface IAuthContext {
+	user: User|null,
+	loading: boolean,
+	signIn: () => Promise<any>,
+	signOut: () => void
+}
+
+export const AuthContext = createContext<IAuthContext>(null!);
 
 type Props = {
 	children: ReactNode
 }
-const AuthProvider = ({ children }:Props ) => {
+export const AuthProvider = ({ children }:Props ) => {
 	const [user, setUser] = useState<User | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		const unsubscribe = FireService.auth.onAuthStateChanged((firebaseUser) => {
+		const unsubscribe = userService.onAuthStateChanged((firebaseUser) => {
 			setUser(firebaseUser);
-			setLoading(false)
+			setLoading(false);
 		});
 
 		return unsubscribe;
-	}, []);
+	}, [FireService.auth, setLoading, setUser]);
+
+	const value = {
+		signIn: () => { setLoading(true); return userService.signIn() },
+		signOut: () => { setLoading(true); return userService.signOut(); },
+		user,
+		loading
+	};
 
 	return (
-		<AuthContext.Provider value={{user, loading}}>
+		<AuthContext.Provider value={value}>
 			{children}
 		</AuthContext.Provider>
 	);
 };
-export default AuthProvider;
